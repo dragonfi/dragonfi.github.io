@@ -1,0 +1,17 @@
+.celestial {
+  background-color: blue;
+  opacity: 0.5;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+}
+
+.content, .simulation-area {
+  width: inherit;
+  height: inherit;
+}
