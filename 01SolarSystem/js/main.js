@@ -130,8 +130,16 @@ class World {
   }
 
   createCounter() {
-    this.counterNode = document.createElement("p");
-    this.worldNode.appendChild(this.counterNode);
+    let counterDiv = document.createElement("div");
+    let counterP = document.createElement("p");
+    let instructionsP = document.createElement("p");
+    instructionsP.textContent = "Click and drag to create new celestial";
+    counterP.textContent = "Count: ";
+    this.counterNode = document.createElement("span");
+    counterDiv.appendChild(instructionsP);
+    counterDiv.appendChild(counterP);
+    counterP.appendChild(this.counterNode);
+    this.worldNode.appendChild(counterDiv);
   }
 
   newCelestial(...args) {
