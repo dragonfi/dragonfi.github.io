@@ -1,6 +1,6 @@
 const Physics = {
   // G: 6.67408e-11; // m3 / kg / s2
-  G: 1,
+  G: 100,
 };
 
 class Vector2D {
@@ -181,7 +181,7 @@ class World {
 
     // v(t+dt) = v(t) + 0.5 * (a(t) + a(t+dt)) * dt
     for (let obj of this.objects) {
-      let accComponent = obj.oldAcc.add(obj.acc).mul(0.5);
+      let accComponent = obj.oldAcc.add(obj.acc).mul(0.5 * dt);
       obj.vel = obj.vel.add(accComponent);
     }
 
