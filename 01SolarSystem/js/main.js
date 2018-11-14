@@ -119,13 +119,12 @@ class World {
       let r = newPos.sub(this.activeCelestial.pos);
       this.activeCelestial.vel = this.activeCelestial.vel.add(r);
     });
-    this.worldNode.addEventListener("mouseup", (click) => {
+    this.worldNode.addEventListener("mouseup", () => {
       this.activeCelestial = null;
     });
   }
 
   mouseToWorld(click) {
-    let box = this.worldNode.getBoundingClientRect();
     return new Vector2D(click.clientX + window.scrollX, click.clientY + window.scrollY);
   }
 
