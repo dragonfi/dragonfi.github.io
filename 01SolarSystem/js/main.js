@@ -1,7 +1,7 @@
 const Physics = {
-  //G: 6.67408e-11; // m3 / kg / s2
+  // G: 6.67408e-11; // m3 / kg / s2
   G: 1,
-}
+};
 
 class Vector2D {
   constructor(x, y) {
@@ -28,7 +28,7 @@ class Vector2D {
     return new Vector2D(this.x / length, this.y / length);
   }
   toString() {
-    return `(${this.x}, ${this.y})`
+    return `(${this.x}, ${this.y})`;
   }
 }
 
@@ -68,7 +68,7 @@ class Celestial {
   }
 
   toString() {
-    return `Celestial(${this.pos}, ${this.vel}, ${this.acc})`
+    return `Celestial(${this.pos}, ${this.vel}, ${this.acc})`;
   }
   updateRepr() {
     this.repr.update(this.pos, this.radius);
@@ -80,13 +80,13 @@ class CelestialDivRepr {
     this.worldNode = worldNode;
     this.id = 0;
 
-    this.node = document.createElement('div');
+    this.node = document.createElement("div");
     this.node.classList.add("celestial");
     this.worldNode.appendChild(this.node);
   }
   update(new_pos, new_radius) {
     //console.log(this.id, new_pos);
-    this.node.style.position = 'absolute';
+    this.node.style.position = "absolute";
     this.node.style.left = `${Math.floor(new_pos.x - new_radius)}px`;
     this.node.style.top = `${Math.floor(new_pos.y - new_radius)}px`;
     this.node.style.height = `${Math.floor(new_radius * 2)}px`;
@@ -109,7 +109,7 @@ class World {
   }
 
   createCounter() {
-    this.counterNode = document.createElement('p');
+    this.counterNode = document.createElement("p");
     this.worldNode.appendChild(this.counterNode);
   }
 
@@ -127,10 +127,10 @@ class World {
 
     let ratio = function(w1, v1, w2, v2) {
       return (w1 * v1 + w2 * v2) / (w1 + w2);
-    }
+    };
     let vectorRatio = function(w1, vec1, w2, vec2) {
       return vec1.mul(w1).add(vec2.mul(w2)).div(w1 + w2);
-    }
+    };
 
     let mass = c1.mass + c2.mass;
     let density = ratio(c1.mass, c1.density, c2.mass, c2.density);
@@ -148,7 +148,7 @@ class World {
     let maxX = this.worldNode.offsetWidth;
     let maxY = this.worldNode.offsetHeight;
 
-    return obj.pos.x < minX || obj.pos.x > maxX || obj.pos.y < minX || obj.pos.y > maxY;
+    return obj.pos.x < minX || obj.pos.x > maxX || obj.pos.y < minY || obj.pos.y > maxY;
   }
 
   tick(dt) {
@@ -185,13 +185,12 @@ class World {
       obj.updateRepr();
     }
 
-    let toMerge = []
+    let toMerge = [];
     for (let obj of this.objects) {
       for (let other of this.objects) {
         if (obj === other || obj.isObsolete || other.isObsolete) {
           continue;
         }
-        let r = other.pos.sub(obj.pos);
         if (obj.isCollidingWith(other)) {
           toMerge.push([obj,other]);
           obj.isObsolete = true;
@@ -230,13 +229,11 @@ function run_main_loop(world_node) {
   });
 
   let dt = 10;
-  setInterval(() => {world.tick(dt / 1000.0)}, dt);
+  setInterval(() => {world.tick(dt / 1000.0);}, dt);
 }
 
 function main() {
-  console.log("main");
   let worlds = document.getElementsByClassName("simulation-area");
-  console.log(worlds);
   for(let world_node of worlds) {
     run_main_loop(world_node);
   }
