@@ -106,10 +106,27 @@ class World {
     this.objects = [];
     this.iteration = 0;
     this.createCounter();
+    this.activeCelestial = null;
 
     this.worldNode.addEventListener("mousedown", (click) => {
-      this.newCelestial(100, new Vector2D(click.layerX, click.layerY), new Vector2D());
+      this.activeCelestial = this.newCelestial(1000, this.mouseToWorld(click), new Vector2D());
     });
+    this.worldNode.addEventListener("mousemove", (click) => {
+      if (this.activeCelestial === null) {
+        return;
+      }
+      let newPos = this.mouseToWorld(click);
+      let r = newPos.sub(this.activeCelestial.pos);
+      this.activeCelestial.vel = this.activeCelestial.vel.add(r);
+    });
+    this.worldNode.addEventListener("mouseup", (click) => {
+      this.activeCelestial = null;
+    });
+  }
+
+  mouseToWorld(click) {
+    let box = this.worldNode.getBoundingClientRect();
+    return new Vector2D(click.clientX + window.scrollX, click.clientY + window.scrollY);
   }
 
   createCounter() {
