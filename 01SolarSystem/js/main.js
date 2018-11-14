@@ -39,7 +39,7 @@ class Celestial {
     this.pos = position || new Vector2D();
     this.vel = velocity || new Vector2D();
     this.acc = new Vector2D();
-    this.old_acc = new Vector2D();
+    this.oldAcc = new Vector2D();
     this.updateRadius();
     this.repr = repr;
     this.isObsolete = false;
@@ -53,9 +53,9 @@ class Celestial {
     }
     // G * m1 * m2 * r.direction() / r.abs() / r.abs() / m1
     let r = other.pos.sub(this.pos);
-    let r_abs = r.abs();
-    let scalar_part = Physics.G * other.mass / r_abs / r_abs;
-    let acc = r.norm().mul(scalar_part);
+    let rAbs = r.abs();
+    let scalarPart = Physics.G * other.mass / rAbs / rAbs;
+    let acc = r.norm().mul(scalarPart);
     this.acc = this.acc.add(acc);
   }
   isCollidingWith(other) {
@@ -63,7 +63,7 @@ class Celestial {
     return r.abs() < (this.radius + other.radius);
   }
   resetAcc() {
-    this.old_add = this.acc;
+    this.oldAcc = this.acc;
     this.acc = new Vector2D();
   }
 
@@ -84,14 +84,14 @@ class CelestialDivRepr {
     this.node.classList.add("celestial");
     this.worldNode.appendChild(this.node);
   }
-  update(new_pos, new_radius) {
-    //console.log(this.id, new_pos);
+  update(newPos, newRadius) {
+    //console.log(this.id, newPos);
     this.node.style.position = "absolute";
-    this.node.style.left = `${Math.floor(new_pos.x - new_radius)}px`;
-    this.node.style.top = `${Math.floor(new_pos.y - new_radius)}px`;
-    this.node.style.height = `${Math.floor(new_radius * 2)}px`;
-    this.node.style.width = `${Math.floor(new_radius * 2)}px`;
-    this.node.style.borderRadius = `${Math.floor(new_radius)}px`;
+    this.node.style.left = `${Math.floor(newPos.x - newRadius)}px`;
+    this.node.style.top = `${Math.floor(newPos.y - newRadius)}px`;
+    this.node.style.height = `${Math.floor(newRadius * 2)}px`;
+    this.node.style.width = `${Math.floor(newRadius * 2)}px`;
+    this.node.style.borderRadius = `${Math.floor(newRadius)}px`;
   }
 
   destroy() {
@@ -106,6 +106,10 @@ class World {
     this.objects = [];
     this.iteration = 0;
     this.createCounter();
+
+    this.worldNode.addEventListener("mousedown", (click) => {
+      this.newCelestial(100, new Vector2D(click.layerX, click.layerY), new Vector2D());
+    });
   }
 
   createCounter() {
@@ -163,9 +167,9 @@ class World {
 
     // x(t+dt) = x(t) + v(t) * dt + 0.5 * a(t) * dt * dt
     for (let obj of this.objects) {
-      let vel_component = obj.vel.mul(dt);
-      let acc_component = obj.acc.mul(0.5 * dt * dt);
-      obj.pos = obj.pos.add(vel_component).add(acc_component);
+      let velComponent = obj.vel.mul(dt);
+      let accComponent = obj.acc.mul(0.5 * dt * dt);
+      obj.pos = obj.pos.add(velComponent).add(accComponent);
     }
 
     for (let obj of this.objects) {
@@ -177,8 +181,8 @@ class World {
 
     // v(t+dt) = v(t) + 0.5 * (a(t) + a(t+dt)) * dt
     for (let obj of this.objects) {
-      let acc_component = obj.old_acc.add(obj.acc).mul(0.5);
-      obj.vel = obj.vel.add(acc_component);
+      let accComponent = obj.oldAcc.add(obj.acc).mul(0.5);
+      obj.vel = obj.vel.add(accComponent);
     }
 
     for (let obj of this.objects) {
@@ -216,17 +220,13 @@ class World {
   }
 }
 
-function run_main_loop(world_node) {
-  let world = new World(world_node);
+function runMainLoop(worldNode) {
+  let world = new World(worldNode);
   world.newCelestial(100, new Vector2D(100, 100), new Vector2D(0, -15));
   world.newCelestial(100, new Vector2D(150, 100), new Vector2D(0, +15));
   for (let i of [1,2,3,4,5]) {
     world.newCelestial(100, new Vector2D(100, 100 + 20 * i), new Vector2D(20 * i, 0));
   }
-
-  window.addEventListener("click", (click) => {
-    world.newCelestial(100, new Vector2D(click.layerX, click.layerY), new Vector2D());
-  });
 
   let dt = 10;
   setInterval(() => {world.tick(dt / 1000.0);}, dt);
@@ -234,8 +234,8 @@ function run_main_loop(world_node) {
 
 function main() {
   let worlds = document.getElementsByClassName("simulation-area");
-  for(let world_node of worlds) {
-    run_main_loop(world_node);
+  for(let worldNode of worlds) {
+    runMainLoop(worldNode);
   }
 }
 
