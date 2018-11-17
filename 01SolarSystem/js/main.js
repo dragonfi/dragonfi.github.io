@@ -110,6 +110,7 @@ class World {
 
     this.worldNode.addEventListener("mousedown", (click) => {
       this.activeCelestial = this.newCelestial(1000, this.mouseToWorld(click), new Vector2D());
+      click.preventDefault();
     });
     this.worldNode.addEventListener("mousemove", (click) => {
       if (this.activeCelestial === null) {
@@ -118,9 +119,11 @@ class World {
       let newPos = this.mouseToWorld(click);
       let r = newPos.sub(this.activeCelestial.pos);
       this.activeCelestial.vel = this.activeCelestial.vel.add(r);
+      click.preventDefault();
     });
     this.worldNode.addEventListener("mouseup", () => {
       this.activeCelestial = null;
+      click.preventDefault();
     });
   }
 
