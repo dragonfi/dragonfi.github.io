@@ -16,10 +16,19 @@ body, html {
   height: 100%;
   background-color: black;
   color: white;
+  font-family: OrbitronBold;
+  font-size: 1rem;
+}
+
+.counter-div {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: white;
 }
 
 p {
-  margin: 0;
+  margin: 1em;
   opacity: 0.5;
 }
 

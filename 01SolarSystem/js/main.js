@@ -133,10 +133,11 @@ class World {
 
   createCounter() {
     let counterDiv = document.createElement("div");
+    counterDiv.classList.add("counter-div");
     let counterP = document.createElement("p");
     let instructionsP = document.createElement("p");
-    instructionsP.textContent = "Click and drag to create new celestial";
-    counterP.textContent = "Count: ";
+    instructionsP.textContent = "Click and drag to create new celestial object.";
+    counterP.textContent = "Object count: ";
     this.counterNode = document.createElement("span");
     counterDiv.appendChild(instructionsP);
     counterDiv.appendChild(counterP);
