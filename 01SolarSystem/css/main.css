@@ -1,3 +1,9 @@
+@font-face {
+    font-family: OrbitronBold;
+    src: url(../fonts/Orbitron-Bold.ttf);
+    font-weight: 500;
+}
+
 .celestial {
   background-color: yellow;
   width: 10px;
